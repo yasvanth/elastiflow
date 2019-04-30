@@ -28445,6 +28445,9 @@
             "autonomous_system": {
               "type": "keyword"
             },
+            "local_autonomous_system": {
+              "type": "keyword"
+            },
             "bgp_next_hop": {
               "type": "ip"
             },
@@ -28502,7 +28505,13 @@
             "dst_asn": {
               "type": "long"
             },
+            "local_dst_asn": {
+              "type": "long"
+            },
             "dst_autonomous_system": {
+              "type": "keyword"
+            },
+            "local_dst_autonomous_system": {
               "type": "keyword"
             },
             "dst_city": {
@@ -28610,7 +28619,13 @@
             "src_asn": {
               "type": "long"
             },
+            "local_src_asn": {
+              "type": "long"
+            },
             "src_autonomous_system": {
+              "type": "keyword"
+            },
+            "local_src_autonomous_system": {
               "type": "keyword"
             },
             "src_city": {
