@@ -53,7 +53,7 @@ mutate {
 ####  HEAnet DC ASN are HEAnet_WAT= 65007, HEAnet_BL=65401 and HEAnet_PW=65402
 
 # Add Desntination VLAN details
-if[flow][local_dst_asn] == "65007" or "65401" or "65401" {
+if [flow][local_dst_asn] == "65007" or "65401" or "65401" {
   geoip{
     id => "elastiflow_postproc_local_dst_vlan"
     source => "[flow][dst_addr]"
@@ -92,7 +92,7 @@ if[flow][local_dst_asn] == "65007" or "65401" or "65401" {
   
 
 # Add Desntination VLAN details
-if[flow][local_dst_asn] == "65007" or "65401" or "65401" {
+if [flow][local_dst_asn] == "65007" or "65401" or "65401" {
   geoip{
     id => "elastiflow_postproc_local_src_vlan"
     source => "[flow][src_addr]"
