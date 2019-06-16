@@ -28487,6 +28487,8 @@
           }
         }
       },
+
+
         {
           "string_fields": {
             "mapping": {
@@ -28593,6 +28595,9 @@
               "type": "keyword"
             },
             "local_dst_autonomous_system": {
+              "type": "keyword"
+            },
+            "local_dst_vlan": {
               "type": "keyword"
             },
             "dst_city": {
@@ -28702,6 +28707,9 @@
             },
             "local_src_asn": {
               "type": "long"
+            },
+            "local_src_vlan": {
+              "type": "keyword"
             },
             "src_autonomous_system": {
               "type": "keyword"

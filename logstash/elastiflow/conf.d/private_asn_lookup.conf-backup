@@ -1,0 +1,185 @@
+filter {
+#################### Test Private ASN - Snippet start - Destination
+# If enabled lookup destination Autonomous System.
+if [@metadata][private_asn_lookup] == "true" {
+  if [flow][dst_asn] == "1123" {
+    # Lookup destination Autonomous System.
+    geoip {
+        id => "elastiflow_postproc_local_geoip_dst_private_asn"
+        source => "[flow][dst_addr]"
+        database => "${ELASTIFLOW_GEOIP_DB_PATH:/etc/logstash/elastiflow/geoipdbs}/HEAnet-ClientASN.mmdb" ##### Add Private ASN
+        cache_size => "${ELASTIFLOW_GEOIP_CACHE_SIZE:8192}"
+        target => "[metadata][local_geoip_dst]"
+        }
+    if [metadata][local_geoip_dst][as_org] {
+      if [metadata][local_geoip_dst][asn] {
+          mutate {
+          id => "elastiflow_postproc_local_dst_as_from_as_org_asn"
+          add_field => { "[flow][local_dst_autonomous_system]" => "%{[metadata][[local_geoip_dst][as_org]} (%{[metadata][local_geoip_dst][asn]})" }
+          }
+        } else {
+            mutate {
+              id => "elastiflow_postproc_local_dst_as_from_as_org"
+              add_field => { "[flow][local_dst_autonomous_system]" => "%{[metadata][local_geoip_dst][as_org]}" }
+              }
+          }
+    } else if [metadata][local_geoip_dst][asn] {
+        mutate {
+          id => "elastiflow_postproc_local_dst_as_from_asn"
+          add_field => { "[flow][local_dst_autonomous_system]" => "%{[metadata][local_geoip_dst][asn]}" }
+          }
+        } else {
+           mutate {
+              add_field => { "[flow][local_dst_autonomous_system]" => "public" }
+              }
+          }
+        mutate {
+          id => "elastiflow_local_dst_asn"
+          rename => { "[metadata][local_geoip_dst][asn]" => "[flow][local_dst_asn]" }
+          }
+  }
+} else {
+    mutate {
+      id => "elastiflow_postproc_local_no_dst_asn_lookup"
+      add_field => { "[flow][local_dst_autonomous_system]" => "public (%{[metadata][local_geoip_dst][asn]})" }
+      }
+    }
+mutate {
+    add_field => {
+    "[flow][local_autonomous_system]" => "%{[flow][local_dst_autonomous_system]}"
+    }
+}
+#### Add VLAN ID and VLAN description when the flow dst is HEAnet DC
+####  HEAnet DC ASN are HEAnet_WAT= 65007, HEAnet_BL=65401 and HEAnet_PW=65402
+
+# Add Desntination VLAN details
+if [flow][local_dst_asn] == "65007" or "65401" or "65401" {
+  geoip{
+    id => "elastiflow_postproc_local_dst_vlan"
+    source => "[flow][dst_addr]"
+    database => "${ELASTIFLOW_GEOIP_DB_PATH:/etc/logstash/elastiflow/geoipdbs}/HEAnetServicesNetworkVLAN.mmdb" ###### Add VLAN database
+    cache_size => "${ELASTIFLOW_GEOIP_CACHE_SIZE:8192}"
+    target => "[metadata][local_vlan_dst]"
+  }
+  if [metadata][local_vlan_dst][vlan_description] {
+    if [metadata][local_vlan_dst][vlan_id] {
+      mutate{
+        id => "elastiflow_postproc_local_dst_vlan_id_name"
+        add_field => { "[flow][local_dst_vlan]" => "%{[metadata][local_vlan_dst][vlan_description]} (%{[metadata][local_vlan_dst][vlan_id]})"}
+      }
+      } else {
+          mutate{
+            id => "elastiflow_postproc_local_dst_vlan_id"
+            add_field => { "[flow][local_dst_vlan]" => "%{[metadata][local_vlan_dst][vlan_description]}"}
+            }
+        }
+  } else if {
+      mutate {
+        id = "elastiflow_postproc_local_dst_vlan"
+        add_field => { "[flow][local_dst_vlan]" => "%{[metadata][local_vlan_dst][vlan_id]}"}
+      }
+    } else {
+        mutate{
+          add_field => {"[flow][local_dst_vlan]" => "UNKOWN"}
+        }
+    }
+} else {
+      mutate {
+        id => "elastiflow_postproc_local_no_dst_vlan"
+        add_field => { "[flow][local_dst_vlan]" => "Non HEAnet DC destination"}
+        }
+    }
+  
+
+# Add Desntination VLAN details
+if [flow][local_dst_asn] == "65007" or "65401" or "65401" {
+  geoip{
+    id => "elastiflow_postproc_local_src_vlan"
+    source => "[flow][src_addr]"
+    database => "${ELASTIFLOW_GEOIP_DB_PATH:/etc/logstash/elastiflow/geoipdbs}/HEAnetServicesNetworkVLAN.mmdb" ###### Add VLAN database
+    cache_size => "${ELASTIFLOW_GEOIP_CACHE_SIZE:8192}"
+    target => "[metadata][local_vlan_src]"
+  }
+  if [metadata][local_vlan_src][vlan_description] {
+    if [metadata][local_vlan_src][vlan_id] {
+      mutate{
+        id => "elastiflow_postproc_local_src_vlan_id_name"
+        add_field => { "[flow][local_src_vlan]" => "%{[metadata][local_vlan_src][vlan_description]} (%{[metadata][local_vlan_src][vlan_id]})"}
+      }
+      } else {
+          mutate{
+            id => "elastiflow_postproc_local_src_vlan_id"
+            add_field => { "[flow][local_src_vlan]" => "%{[metadata][local_vlan_src][vlan_description]}"}
+            }
+        }
+  } else if {
+      mutate {
+        id = "elastiflow_postproc_local_dst_vlan"
+        add_field => { "[flow][local_src_vlan]" => "%{[metadata][local_vlan_src][vlan_id]}"}
+      }
+    } else {
+        mutate{
+          add_field => {"[flow][local_src_vlan]" => "UNKOWN"}
+        }
+    }
+} else {
+      mutate {
+        id => "elastiflow_postproc_local_no_src_vlan"
+        add_field => { "[flow][local_src_vlan]" => "Non HEAnet DC source"}
+        }
+    }
+  
+
+
+
+#################### Test Private ASN - Snippet start - Source
+# If enabled lookup destination Autonomous System.
+if [@metadata][private_asn_lookup] == "true" {
+  if [flow][src_asn] == "1123" {
+   # Lookup destination Autonomous System.
+    geoip {
+        id => "elastiflow_postproc_local_geoip_src_private_asn"
+        source => "[flow][src_addr]"
+        database => "${ELASTIFLOW_GEOIP_DB_PATH:/etc/logstash/elastiflow/geoipdbs}/HEAnet-ClientASN.mmdb" ##### Add Private ASN
+        cache_size => "${ELASTIFLOW_GEOIP_CACHE_SIZE:8192}"
+        target => "[metadata][local_geoip_src]"
+        }
+    if [metadata][local_geoip_src][as_org] {
+        if [metadata][local_geoip_src][asn] {
+          mutate {
+            id => "elastiflow_postproc_local_src_as_from_as_org_asn"
+            add_field => { "[flow][local_src_autonomous_system]" => "%{[metadata][[local_geoip_src][as_org]} (%{[metadata][local_geoip_src][asn]})" }
+            }
+        } else {
+            mutate {
+              id => "elastiflow_postproc_local_src_as_from_as_org"
+              add_field => { "[flow][local_src_autonomous_system]" => "%{[metadata][local_geoip_src][as_org]}" }
+              }
+          }
+    } else if [metadata][local_geoip_src][asn] {
+        mutate {
+          id => "elastiflow_postproc_local_src_as_from_asn"
+          add_field => { "[flow][local_src_autonomous_system]" => "%{[metadata][local_geoip_src][asn]}" }
+          }
+        } else {
+            mutate {
+              add_field => { "[flow][local_src_autonomous_system]" => "public" }
+              }
+          }
+    mutate {
+      id => "elastiflow_local_src_asn"
+      rename => { "[metadata][local_geoip_src][asn]" => "[flow][local_src_asn]" }
+      }
+  }
+} else {
+    mutate {
+      id => "elastiflow_postproc_local_no_src_asn_lookup"
+      add_field => { "[flow][local_src_autonomous_system]" => "public (%{[metadata][local_geoip_src][asn]})" }
+      }
+   }
+mutate {
+  add_field => { "[flow][local_autonomous_system]" => "%{[flow][local_src_autonomous_system]}"
+  }
+}
+
+}
