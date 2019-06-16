@@ -63,6 +63,8 @@
           "flow.traffic_direction",
           "flow.traffic_locality",
           "flow.vlan",
+          "flow.internal_src_asn",
+          "flow.internal_dst_asn",
           "node.ipaddr",
           "node.hostname",
           "tags"
@@ -28588,16 +28590,7 @@
             "dst_asn": {
               "type": "long"
             },
-            "local_dst_asn": {
-              "type": "long"
-            },
             "dst_autonomous_system": {
-              "type": "keyword"
-            },
-            "local_dst_autonomous_system": {
-              "type": "keyword"
-            },
-            "local_dst_vlan": {
               "type": "keyword"
             },
             "dst_city": {
@@ -28705,16 +28698,7 @@
             "src_asn": {
               "type": "long"
             },
-            "local_src_asn": {
-              "type": "long"
-            },
-            "local_src_vlan": {
-              "type": "keyword"
-            },
             "src_autonomous_system": {
-              "type": "keyword"
-            },
-            "local_src_autonomous_system": {
               "type": "keyword"
             },
             "src_city": {
@@ -28764,6 +28748,24 @@
             },
             "vlan": {
               "type": "long"
+            },
+            "internal_dst_asn": {
+              "type": "long"
+            },
+            "internal_dst_autonomous_system": {
+              "type": "keyword"
+            },
+            "internal_dst_vlan": {
+              "type": "keyword"
+            },
+            "internal_src_asn": {
+              "type": "long"
+            },
+            "internal_src_vlan": {
+              "type": "keyword"
+            },
+            "internal_src_autonomous_system": {
+              "type": "keyword"
             }
           }
         },
