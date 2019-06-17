@@ -63,8 +63,6 @@
           "flow.traffic_direction",
           "flow.traffic_locality",
           "flow.vlan",
-          "flow.internal_src_asn",
-          "flow.internal_dst_asn",
           "node.ipaddr",
           "node.hostname",
           "tags"
@@ -28491,298 +28489,6 @@
       },
 
 
-        {
-          "string_fields": {
-            "mapping": {
-              "type": "keyword"
-            },
-            "match_mapping_type": "string",
-            "match": "*"
-          }
-        }
-      ],
-      "properties": {
-        "@timestamp": {
-          "type": "date"
-        },
-        "@version": {
-          "type": "keyword"
-        },
-        "event": {
-          "dynamic": true,
-          "type": "object",
-          "properties": {
-            "host": {
-              "type": "keyword"
-            },
-            "type": {
-              "type": "keyword"
-            }
-          }
-        },
-        "flow": {
-          "dynamic": true,
-          "type": "object",
-          "properties": {
-            "application": {
-              "type": "keyword"
-            },
-            "autonomous_system": {
-              "type": "keyword"
-            },
-            "local_autonomous_system": {
-              "type": "keyword"
-            },
-            "bgp_next_hop": {
-              "type": "ip"
-            },
-            "bgp_valid_state": {
-              "type": "long"
-            },
-            "bytes": {
-              "type": "long"
-            },
-            "city": {
-              "type": "keyword"
-            },
-            "client_addr": {
-              "type": "ip"
-            },
-            "client_asn": {
-              "type": "long"
-            },
-            "client_autonomous_system": {
-              "type": "keyword"
-            },
-            "client_city": {
-              "type": "keyword"
-            },
-            "client_country": {
-              "type": "keyword"
-            },
-            "client_country_code": {
-              "type": "keyword"
-            },
-            "client_geo_location": {
-              "type": "geo_point"
-            },
-            "client_hostname": {
-              "type": "keyword"
-            },
-            "client_rep_tags": {
-              "type": "keyword"
-            },
-            "country": {
-              "type": "keyword"
-            },
-            "country_code": {
-              "type": "keyword"
-            },
-            "direction": {
-              "type": "keyword"
-            },
-            "dst_addr": {
-              "type": "ip"
-            },
-            "dst_addr_trans": {
-              "type": "ip"
-            },
-            "dst_asn": {
-              "type": "long"
-            },
-            "dst_autonomous_system": {
-              "type": "keyword"
-            },
-            "dst_city": {
-              "type": "keyword"
-            },
-            "dst_country": {
-              "type": "keyword"
-            },
-            "dst_country_code": {
-              "type": "keyword"
-            },
-            "dst_geo_location": {
-              "type": "geo_point"
-            },
-            "dst_hostname": {
-              "type": "keyword"
-            },
-            "dst_mac": {
-              "type": "keyword"
-            },
-            "dst_mask_len": {
-              "type": "long"
-            },
-            "dst_port": {
-              "type": "long"
-            },
-            "dst_port_trans": {
-              "type": "long"
-            },
-            "dst_port_name": {
-              "type": "keyword"
-            },
-            "dst_rep_tags": {
-              "type": "keyword"
-            },
-            "input_ifname": {
-              "type": "keyword"
-            },
-            "input_snmp": {
-              "type": "keyword"
-            },
-            "ip_protocol": {
-              "type": "keyword"
-            },
-            "ip_version": {
-              "type": "keyword"
-            },
-            "next_hop": {
-              "type": "ip"
-            },
-            "output_ifname": {
-              "type": "keyword"
-            },
-            "output_snmp": {
-              "type": "keyword"
-            },
-            "packets": {
-              "type": "long"
-            },
-            "rep_tags": {
-              "type": "keyword"
-            },
-            "sampling_interval": {
-              "type": "long"
-            },
-            "server_addr": {
-              "type": "ip"
-            },
-            "server_asn": {
-              "type": "long"
-            },
-            "server_autonomous_system": {
-              "type": "keyword"
-            },
-            "server_city": {
-              "type": "keyword"
-            },
-            "server_country": {
-              "type": "keyword"
-            },
-            "server_country_code": {
-              "type": "keyword"
-            },
-            "server_geo_location": {
-              "type": "geo_point"
-            },
-            "server_hostname": {
-              "type": "keyword"
-            },
-            "server_rep_tags": {
-              "type": "keyword"
-            },
-            "service_name": {
-              "type": "keyword"
-            },
-            "service_port": {
-              "type": "long"
-            },
-            "src_addr": {
-              "type": "ip"
-            },
-            "src_addr_trans": {
-              "type": "ip"
-            },
-            "src_asn": {
-              "type": "long"
-            },
-            "src_autonomous_system": {
-              "type": "keyword"
-            },
-            "src_city": {
-              "type": "keyword"
-            },
-            "src_country": {
-              "type": "keyword"
-            },
-            "src_country_code": {
-              "type": "keyword"
-            },
-            "src_geo_location": {
-              "type": "geo_point"
-            },
-            "src_hostname": {
-              "type": "keyword"
-            },
-            "src_mac": {
-              "type": "keyword"
-            },
-            "src_mask_len": {
-              "type": "long"
-            },
-            "src_port": {
-              "type": "long"
-            },
-            "src_port_trans": {
-              "type": "long"
-            },
-            "src_port_name": {
-              "type": "keyword"
-            },
-            "src_rep_tags": {
-              "type": "keyword"
-            },
-            "tcp_flags": {
-              "type": "keyword"
-            },
-            "tos": {
-              "type": "long"
-            },
-            "traffic_direction": {
-              "type": "keyword"
-            },
-            "traffic_locality": {
-              "type": "keyword"
-            },
-            "vlan": {
-              "type": "long"
-            },
-            "internal_dst_asn": {
-              "type": "long"
-            },
-            "internal_dst_autonomous_system": {
-              "type": "keyword"
-            },
-            "internal_dst_vlan": {
-              "type": "keyword"
-            },
-            "internal_src_asn": {
-              "type": "long"
-            },
-            "internal_src_vlan": {
-              "type": "keyword"
-            },
-            "internal_src_autonomous_system": {
-              "type": "keyword"
-            }
-          }
-        },
-        "node": {
-          "dynamic": true,
-          "type": "object",
-          "properties": {
-            "ipaddr": {
-              "type": "ip"
-            },
-            "hostname": {
-              "type": "keyword"
-            }
-          }
-        },
-        "tags": {
-          "type": "keyword"
       {
         "string_fields": {
           "mapping": {
@@ -29037,6 +28743,24 @@
           },
           "vlan": {
             "type": "long"
+          },
+          "internal_dst_asn": {
+            "type": "long"
+          },
+          "internal_dst_autonomous_system": {
+            "type": "keyword"
+          },
+          "internal_dst_vlan": {
+            "type": "keyword"
+          },
+          "internal_src_asn": {
+            "type": "long"
+          },
+          "internal_src_vlan": {
+            "type": "keyword"
+          },
+          "internal_src_autonomous_system": {
+            "type": "keyword"
           }
         }
       },
