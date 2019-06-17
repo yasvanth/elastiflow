@@ -29050,7 +29050,6 @@
           "hostname": {
             "type": "keyword"
           }
->>>>>>> upstream/master
         }
       },
       "tags": {
